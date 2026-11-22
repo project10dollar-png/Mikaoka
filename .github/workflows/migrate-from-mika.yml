@@ -1,6 +1,7 @@
 name: Migrate Mika into Mikaoka
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 
