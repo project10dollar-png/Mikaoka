@@ -31,5 +31,5 @@ jobs:
           git -C source push --force target \
             refs/heads/feature/hey-oka-branding:refs/heads/main \
             refs/heads/feature/hey-oka-branding:refs/heads/feature/hey-oka-branding \
-            refs/heads/main:refs/heads/upstream-main \
+            refs/remotes/origin/main:refs/heads/upstream-main \
             --tags
