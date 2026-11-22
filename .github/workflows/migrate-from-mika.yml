@@ -28,4 +28,8 @@ jobs:
           git -C source config user.name "github-actions[bot]"
           git -C source config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C source remote add target "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPOSITORY}.git"
-          git -C source push --force target HEAD:refs/heads/main
+          git -C source push --force target \\
+  refs/heads/feature/hey-oka-branding:refs/heads/main \\
+  refs/heads/feature/hey-oka-branding:refs/heads/feature/hey-oka-branding \\
+  refs/heads/main:refs/heads/upstream-main \\
+  --tags
