@@ -22,7 +22,7 @@ jobs:
 
       - name: Replace Mikaoka main with the customized Mika branch
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
           TARGET_REPOSITORY: ${{ github.repository }}
         run: |
           git -C source config user.name "github-actions[bot]"
