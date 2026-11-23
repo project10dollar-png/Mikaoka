@@ -67,8 +67,10 @@ func normalizeLanguage(tag string) string {
 	return "zh-Hans"
 }
 func pageLanguage(r *http.Request) string {
-	if c, err := r.Cookie("mika_language"); err == nil && translations[c.Value] != nil {
-		return c.Value
+	if c, err := r.Cookie("mika_language"); err == nil {
+		if translations[c.Value] != nil { return c.Value }
+	} else {
+		return "id"
 	}
 	type choice struct {
 		lang string
