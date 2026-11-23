@@ -44,7 +44,7 @@ func consoleLogin(t *testing.T, f *fixture, c *websocket.Conn) *http.Cookie {
 func TestConsolePageAndSessionLifecycle(t *testing.T) {
 	f := newFixture(t)
 	status, headers, page := f.request(t, "GET", "/app", "", "", "")
-	if status != 200 || !strings.Contains(string(page), "Mika Anywhere") {
+	if status != 200 || !strings.Contains(string(page), "Mika Anywhere") || !strings.Contains(string(page), `<html lang="id">`) || !strings.Contains(string(page), "Hubungkan ponsel") {
 		t.Fatalf("console page: %d", status)
 	}
 	if csp := headers.Get("Content-Security-Policy"); !strings.Contains(csp, "connect-src 'self'") {
