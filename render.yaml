@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mika-relay
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerContext: ./tools/relay
+    dockerfilePath: ./tools/relay/Dockerfile
+    autoDeployTrigger: commit
+    healthCheckPath: /healthz
+    disk:
+      name: mika-relay-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: MIKA_OWNER_KEY
+        generateValue: true
