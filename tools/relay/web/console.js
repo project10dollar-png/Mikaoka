@@ -1,6 +1,6 @@
 "use strict";
 
-const isIndonesian = navigator.language.toLowerCase().startsWith("id");
+const isIndonesian = true;
 const tx = isIndonesian
   ? {
       running: "Sedang berjalan", conversations: "Percakapan", logout: "Putuskan", back: "‹ Kembali",
