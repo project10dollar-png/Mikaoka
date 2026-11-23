@@ -1,6 +1,22 @@
 "use strict";
 
-const tx = navigator.language.toLowerCase().startsWith("zh")
+const isIndonesian = navigator.language.toLowerCase().startsWith("id");
+const tx = isIndonesian
+  ? {
+      running: "Sedang berjalan", conversations: "Percakapan", logout: "Putuskan", back: "‹ Kembali",
+      emptyRunning: "Tidak ada tugas yang berjalan", emptyConversations: "Belum ada percakapan",
+      loadOlder: "Muat lebih lama", loginLead: "Hubungkan ponsel dengan token akses dari menu Hubungkan komputer.",
+      tokenLabel: "Token akses", connect: "Hubungkan",
+      loginNote: "Token hanya tersimpan di memori gateway, tidak disimpan di browser, dan hilang saat gateway dimulai ulang.",
+      loginFailed: "Tidak dapat menghubungi ponsel. Periksa token dan pastikan akses jarak jauh aktif.",
+      rateLimited: "Terlalu banyak percobaan. Coba lagi dalam satu menit.",
+      tokenRejected: "Token ditolak atau akses jarak jauh tidak aktif.",
+      needsYou: "Perlu tindakan Anda", step: "Langkah {n}", turns: "{n} giliran",
+      updated: "Diperbarui {t}", answerEmpty: "(tidak ada jawaban)", screen: "[layar]",
+      unsupported: "Versi Mika di ponsel belum menyediakan antarmuka konsol hanya-baca. Perbarui aplikasi ponsel ke versi yang mendukung fitur ini, lalu muat ulang halaman.",
+      unsupportedShort: "Perlu pembaruan aplikasi"
+    }
+  : navigator.language.toLowerCase().startsWith("zh")
   ? {
       running: "正在运行", conversations: "对话", logout: "断开", back: "‹ 返回",
       emptyRunning: "现在没有在跑的任务", emptyConversations: "还没有对话",
@@ -30,7 +46,9 @@ const tx = navigator.language.toLowerCase().startsWith("zh")
       unsupportedShort: "Phone update required",
     };
 
-const statusText = navigator.language.toLowerCase().startsWith("zh")
+const statusText = isIndonesian
+  ? { running: "Berjalan", queued: "Dalam antrean", paused: "Dijeda", waiting_for_answer: "Menunggu jawaban Anda", waiting_on_phone: "Perlu ditangani di ponsel", starting: "Memulai", done: "Selesai", failed: "Gagal", cancelled: "Dibatalkan" }
+  : navigator.language.toLowerCase().startsWith("zh")
   ? { running: "进行中", queued: "排队中", paused: "已暂停", waiting_for_answer: "等你回答", waiting_on_phone: "需在手机上处理", starting: "准备中", done: "完成", failed: "没办成", cancelled: "已停止" }
   : { running: "Running", queued: "Queued", paused: "Paused", waiting_for_answer: "Waiting for you", waiting_on_phone: "On the phone", starting: "Starting", done: "Done", failed: "Failed", cancelled: "Cancelled" };
 
@@ -71,13 +89,13 @@ function clean(text) {
 function formatRelative(ms) {
   if (!ms) return "";
   const diff = Date.now() - ms;
-  if (diff < 60_000) return navigator.language.startsWith("zh") ? "刚刚" : "just now";
+  if (diff < 60_000) return isIndonesian ? "baru saja" : navigator.language.startsWith("zh") ? "刚刚" : "just now";
   const minutes = Math.floor(diff / 60_000);
-  if (minutes < 60) return navigator.language.startsWith("zh") ? `${minutes} 分钟前` : `${minutes}m ago`;
+  if (minutes < 60) return isIndonesian ? `${minutes} menit lalu` : navigator.language.startsWith("zh") ? `${minutes} 分钟前` : `${minutes}m ago`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return navigator.language.startsWith("zh") ? `${hours} 小时前` : `${hours}h ago`;
+  if (hours < 24) return isIndonesian ? `${hours} jam lalu` : navigator.language.startsWith("zh") ? `${hours} 小时前` : `${hours}h ago`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return navigator.language.startsWith("zh") ? `${days} 天前` : `${days}d ago`;
+  if (days < 30) return isIndonesian ? `${days} hari lalu` : navigator.language.startsWith("zh") ? `${days} 天前` : `${days}d ago`;
   return new Date(ms).toLocaleDateString();
 }
 
@@ -90,7 +108,7 @@ function statusClass(status) {
 }
 
 function applyText() {
-  document.documentElement.lang = navigator.language;
+  document.documentElement.lang = isIndonesian ? "id" : navigator.language;
   $("running-title").textContent = tx.running;
   $("conversations-title").textContent = tx.conversations;
   $("login-lead").textContent = tx.loginLead;
@@ -190,7 +208,7 @@ async function refreshAll() {
 
 function offline() {
   online.classList.add("off");
-  $("top-sub").textContent = navigator.language.startsWith("zh") ? "手机不在线" : "Phone offline";
+  $("top-sub").textContent = isIndonesian ? "Ponsel offline" : navigator.language.startsWith("zh") ? "手机不在线" : "Phone offline";
 }
 
 // The gateway can be updated before the phone app. Probe the phone's capability list once and
@@ -308,7 +326,7 @@ function renderTurns() {
   if (!page) return;
   turnsBox.replaceChildren();
   if (!page.turns || !page.turns.length) {
-    turnsBox.appendChild(el("div", "empty", navigator.language.startsWith("zh") ? "这个对话还没有轮次" : "No turns yet"));
+    turnsBox.appendChild(el("div", "empty", isIndonesian ? "Belum ada giliran percakapan" : navigator.language.startsWith("zh") ? "这个对话还没有轮次" : "No turns yet"));
     return;
   }
   for (const turn of page.turns) turnsBox.appendChild(renderTurn(turn));
@@ -324,7 +342,7 @@ function renderTurn(turn) {
   const chip = el("span", "status " + statusClass(turn.status), statusText[turn.status] || turn.status);
   meta.appendChild(chip);
   if (turn.note) meta.appendChild(el("span", "", clean(turn.note)));
-  if (turn.truncated) meta.appendChild(el("span", "", navigator.language.startsWith("zh") ? "已截断" : "truncated"));
+  if (turn.truncated) meta.appendChild(el("span", "", isIndonesian ? "dipotong" : navigator.language.startsWith("zh") ? "已截断" : "truncated"));
   wrap.appendChild(meta);
   return wrap;
 }
