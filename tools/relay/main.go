@@ -32,7 +32,7 @@ func main() {
 	data := flag.String("data", "/data/relay.json", "persistent state file")
 	ownerFile := flag.String("owner-key-file", "/data/owner-key", "file containing the owner secret (at least 32 characters)")
 	initKey := flag.Bool("init-owner-key", false, "create an owner key file and exit; never overwrite")
-	trustProxyDefault := os.Getenv("RENDER") != ""
+	trustProxyDefault := os.Getenv("RENDER_EXTERNAL_URL") != ""
 	trustProxy := flag.Bool("trust-proxy", trustProxyDefault, "trust the reverse proxy address headers")
 	local := flag.Bool("local-http", false, "development only: allow HTTP with both public URL and listen address on 127.0.0.1")
 	flag.Parse()
